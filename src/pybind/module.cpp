@@ -53,7 +53,7 @@ PYBIND11_MODULE(aestream, m) {
       .def("__exit__",
            [&](FileInput &i, py::object t, py::object v, py::object trace) {
              i.stop_stream();
-             return true;
+             return false;
            })
       .def("start_stream", &FileInput::start_stream)
       .def("stop_stream", &FileInput::stop_stream)
