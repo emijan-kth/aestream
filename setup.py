@@ -57,7 +57,6 @@ setup(
     ext_modules=[
         cpp_extension.CppExtension(
             name="aestream",
-            headers=cpp_headers,
             sources=cpp_sources,
             extra_compile_args=[
                 "-O3",
