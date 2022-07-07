@@ -14,8 +14,8 @@ from aestream import DVSInput
 
 # Initialize our canvas
 fig, (ax1, ax2) = plt.subplots(1, 2)
-image1 = ax1.imshow(torch.zeros(260, 346), cmap="gray", vmin=0, vmax=1)
-image2 = ax2.imshow(torch.zeros(260, 346), cmap="gray", vmin=0, vmax=2)
+image1 = ax1.imshow(torch.zeros(480, 640), cmap="gray", vmin=0, vmax=1)
+image2 = ax2.imshow(torch.zeros(480, 640), cmap="gray", vmin=0, vmax=2)
 plt.show(block=False)
 plt.pause(0.1)
 bg = fig.canvas.copy_from_bbox(fig.bbox)
@@ -24,17 +24,18 @@ ax2.draw_artist(image2)
 fig.canvas.blit(fig.bbox)
 
 # Initialize PyTorch network
-net = snn.LICell().cuda()
+#net = snn.LICell().cuda()
+net = snn.LIFCell().cpu()
 state = None
 
 # Start streaming from a DVS camera on USB 2:2 and put them on the GPU
 try:
-    with DVSInput(2, 2, (640, 480), device="cuda") as stream:
+    with DVSInput(2, 6, (640, 480), device="cpu") as stream:
         while True:
             # Read a tensor (346, 260) tensor from the camera
             tensor = stream.read()
             with torch.inference_mode():
-                filtered, state = net(tensor.view(1, 1, 346, 260), state)
+                filtered, state = net(tensor.view(1, 1, 640, 480), state)
 
             # Redraw figure
             fig.canvas.restore_region(bg)

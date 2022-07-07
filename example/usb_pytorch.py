@@ -33,7 +33,7 @@ net.weight = torch.nn.Parameter(torch.tensor([[[
 ]]], dtype=torch.float32))
 
 # Start streaming from a DVS camera on USB 2:7 and put them on the GPU
-with DVSInput(2, 4, (640, 480), device="cpu") as stream:
+with DVSInput(2, 8, (640, 480), device="cpu") as stream:
     try:
         while True:
             # Read a tensor (346, 260) tensor from the camera
