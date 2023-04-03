@@ -60,6 +60,11 @@ endif()
 #     message(STATUS "Prophesee dependencies (MetavisionSDK) not found, ignoring")
 # endif()
 
+# OpenCV
+find_package (OpenCV 4.0.0 REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+
+
 # Create the input library
 add_library(aestream_input SHARED ${input_sources})
 target_link_libraries(aestream_input ${input_libraries})
