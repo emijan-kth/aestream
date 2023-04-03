@@ -56,7 +56,8 @@ void TensorBuffer::set_buffer(uint16_t data[], int numbytes) {
     // Decode x, y
     const int16_t y_coord = data[i] & 0x7FFF;
     const int16_t x_coord = data[i + 1] & 0x7FFF;
-    assign_event(buffer1.get(), x_coord, y_coord);
+    bool polarity = data[i] & 0x8000;
+    assign_event(buffer1.get(), x_coord, y_coord, polarity);
   }
 }
 
@@ -75,13 +76,13 @@ void TensorBuffer::set_vector(std::vector<AER::Event> events) {
   }
 #endif
   for (auto event : events) {
-    assign_event(buffer1.get(), event.x, event.y);
+    assign_event(buffer1.get(), event.x, event.y, event.polarity);
   }
 }
 
 template <typename R>
-inline void TensorBuffer::assign_event(R *array, int16_t x, int16_t y) {
-  (*(array + shape[1] * x + y))++;
+inline void TensorBuffer::assign_event(R *array, int16_t x, int16_t y, bool polarity) {
+  (*(array + shape[1] * x + y)) = (polarity << 1) - 1;
 }
 
 BufferPointer TensorBuffer::read() {
