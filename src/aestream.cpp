@@ -137,7 +137,7 @@ int main(int argc, char *argv[]) {
         "Prophesee cameras unavailable: please recompile with MetavisionSDK");
 #endif
   } else if (app_input_file->parsed()) {
-    input_generator = file_event_generator(input_filename, input_ignore_time);
+    input_generator = file_event_generator(input_filename, true, input_ignore_time);
   }
 
   //

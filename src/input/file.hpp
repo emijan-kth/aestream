@@ -16,4 +16,4 @@
  */
 Generator<AEDAT::PolarityEvent> file_event_generator(const std::string filename,
                                                      const std::atomic<bool> &runFlag,
-                                                     bool ignore_time = false);
+                                                     bool ignore_time);
