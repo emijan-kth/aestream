@@ -83,6 +83,8 @@ int main(int argc, char *argv[]) {
   // - UDP
   std::string port = "3333";           // Port number
   std::string ipAddress = "localhost"; // IP Adress - if NULL, use own IP.
+  std::string port2 = "";           // Port number
+  std::string ipAddress2 = ""; // IP Adress - if NULL, use own IP.
   std::uint32_t bufferSize = 1024;
   std::uint16_t packetSize = 128;
   bool include_timestamp = false;
@@ -92,6 +94,10 @@ int main(int argc, char *argv[]) {
                              "Destination IP. Defaults to localhost");
   app_output_udp->add_option("port", port,
                              "Destination port. Defaults to 3333");
+  app_output_udp->add_option("--destination2", ipAddress2,
+                             "Second destination IP, encode polarity as x coordinate LSB.");
+  app_output_udp->add_option("--port2", port2,
+                             "Second destination port.");
   app_output_udp->add_option("--buffer-size", bufferSize,
                              "UDP buffer size. Defaults to 1024");
   app_output_udp->add_option(
@@ -99,6 +105,21 @@ int main(int argc, char *argv[]) {
       "Number of events in a single UDP packet. Defaults to 128");
   app_output_udp->add_option("--include-timestamp", include_timestamp,
                              "Include timestamp in events");
+  bool rotate180 = false;
+  app_output_udp->add_option("--rotate180", rotate180,
+                             "Rotate coordinates 180 degrees");
+  int input_width = 0;
+  app_output_udp->add_option("--width", input_width,
+                             "Input width, needed for rotation");
+  int input_height = 0;
+  app_output_udp->add_option("--height", input_height,
+                             "Input height, needed for rotation");
+  int scale_x = 0;
+  app_output_udp->add_option("--scale-x", scale_x,
+                             "Divide x coordinate by number.");
+  int scale_y = 0;
+  app_output_udp->add_option("--scale-y", scale_y,
+                             "Divide y coordinate by number.");
   // - FILE
   std::string output_filename;
   auto app_output_file = app_output->add_subcommand("file", "File output");
@@ -150,7 +171,7 @@ int main(int argc, char *argv[]) {
     if (app_output_udp->parsed()) {
       std::cout << "Sending events to: " << ipAddress << " on port: " << port
                 << std::endl;
-      DVSToUDP<AER::Event> client(bufferSize, port, ipAddress);
+      DVSToUDP<AER::Event> client(bufferSize, port, ipAddress, port2, ipAddress2, rotate180, input_width, input_height, scale_x, scale_y);
       client.stream(input_generator, include_timestamp);
     } else if (app_output_file->parsed()) {
       std::cout << "Sending events to file " << output_filename << std::endl;
