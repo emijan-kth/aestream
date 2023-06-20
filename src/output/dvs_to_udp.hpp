@@ -28,7 +28,7 @@ public:
 template <typename T> class DVSToUDP {
   uint32_t buffer_size;
   bool rotate180;
-  int input_width, input_height;
+  int input_max_x, input_max_y;
   int scale_x, scale_y;
 
   static const uint16_t UDP_max_bytesize = 512;

@@ -74,8 +74,8 @@ template <typename T>
 DVSToUDP<T>::DVSToUDP(uint32_t bfsize, const string &port, const string &IP, const string &port2, const string &IP2, bool rotate180, int input_width, int input_height, int scale_x, int scale_y)
   : buffer_size{bfsize},
   rotate180{rotate180},
-  input_width{input_width},
-  input_height{input_height},
+  input_max_x{input_width - 1},
+  input_max_y{input_height - 1},
   scale_x{scale_x},
   scale_y{scale_y}
 {
@@ -106,8 +106,8 @@ void DVSToUDP<T>::stream(Generator<T> &input_generator,
 
     if (rotate180)
     {
-      event.x = input_width - event.x;
-      event.y = input_height - event.y;
+      event.x = input_max_x - event.x;
+      event.y = input_max_y - event.y;
     }
 
     if (scale_x) event.x /= scale_x;
